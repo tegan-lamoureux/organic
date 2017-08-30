@@ -9,58 +9,35 @@
                    stream_write(USART,x);  \
                 }while(0)
 
-static void delay(volatile int count)
+
+// Find all current organisms in the biosphere (biosphere = predefined region of memory)
+// Sequentially execute their next instruction.
+static void lifecycles()
 {
-	count *= 25000;
-	while (count--) {
-	}
+
 }
 
-static void busy_loop(void *str)
+void universe_loop()
 {
-	while (1) {
-		puts(str);
-		puts(": Running...\r\n");
-		delay(RECOMMAND_TIME_INTERVAL);
-	}
-}
-
-void test1(void *userdata)
-{
-	busy_loop(userdata);
-}
-
-void test2(void *userdata)
-{
-	busy_loop(userdata);
-}
-
-void test3(void *userdata)
-{
-	busy_loop(userdata);
+    // Main processing loop.    
+    while (1)
+    {
+	// Use individual functions/loops to execute universe tasks critical to every iteration.
+	lifecycles();
+    }
 }
 
 int main(void)
 {
-	const char *str1 = "Task1", *str2 = "Task2", *str3 = "Task3";
+    stream_init(USART);
 
-	stream_init(USART);
+    if (thread_create(universe_loop, NULL) == -1) {
+	puts("Universe thread creation failed\r\n");
+    }
 
-	if (thread_create(test1, (void *) str1) == -1) {
-		puts("Thread 1 creation failed\r\n");
-	}
+    SysTick_init();
 
-	if (thread_create(test2, (void *) str2) == -1) {
-		puts("Thread 2 creation failed\r\n");
-	}
+    thread_start();
 
-	if (thread_create(test3, (void *) str3) == -1) {
-		puts("Thread 3 creation failed\r\n");
-	}
-
-	SysTick_init();
-
-	thread_start();
-
-	return 0;
+    return 0;
 }
