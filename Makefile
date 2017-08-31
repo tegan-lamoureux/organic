@@ -94,4 +94,5 @@ astyle:
 
 clean:
 	rm -rf $(RELEASE_DIR)
+	rm -rf DAC*
 
